@@ -1,0 +1,238 @@
+﻿@model IEnumerable<EFLYER.DTOs.OrderDTO>
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor Accessor
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- bootstrap css -->
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css">
+    <!-- style css -->
+    <link rel="stylesheet" type="text/css" href="~/css/style.css">
+    <!-- Responsive-->
+    <link rel="stylesheet" href="~/css/responsive.css">
+    <!-- fevicon -->
+    <link rel="icon" href="~/images/fevicon.png" type="image/gif" />
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="~/css/jquery.mCustomScrollbar.min.css">
+    <!-- Tweaks for older IEs-->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+    <!-- font awesome -->
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--  -->
+    <!-- owl stylesheets -->
+    <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Poppins:400,700&display=swap&subset=latin-ext" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css">
+    <link rel="stylesoeet" href="~/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .quant {
+            padding: 15px;
+        }
+
+        .cart-table {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+            .cart-table img {
+                max-width: 120px;
+                height: auto;
+                border-radius: 8px;
+            }
+
+        .quantity-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 18px;
+            color: #ffffff;
+            background-color: #007bff;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+            .quantity-btn:hover {
+                background-color: #0056b3;
+            }
+
+        .btn-danger {
+            margin-left: 18px;
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+            .btn-danger:hover {
+                background-color: #c82333;
+                border-color: #bd2130;
+            }
+
+        .total-amount {
+            font-size: 22px;
+            font-weight: bold;
+            color: #343a40;
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ced4da;
+            text-align: center;
+        }
+
+        .place-order-btn {
+            background-color: #28a745;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+            .place-order-btn:hover {
+                background-color: #218838;
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            }
+
+        .btn-link {
+            font-size: 16px;
+            color: #007bff;
+        }
+
+            .btn-link:hover {
+                color: #0056b3;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header_section_top">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="custom_menu">
+                        <ul>
+                            <li><a href="@Url.Action("Index","Home")">Home</a></li>
+                            <li><a href="#">AboutUs</a></li>
+                            <li><a href="#">New Releases</a></li>
+                            <li><a href="#">Today's Deals</a></li>
+                            <li><a href="#">Customer Service</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <h1 class="mb-4">Shopping Cart</h1>
+        <hr />
+        <div class="cart-table">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th></th>
+                        <th>Product Details</th>
+                        <th class="text-right">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.ProductImagePath))
+                                {
+                                    <img src="@Url.Content(item.ProductImagePath)" alt="Product Image" />
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content("~/Image/default.jpg")" alt="Default Image" />
+                                }
+                                <div class="mt-2">
+                                    <strong class="quant">Quantity</strong>
+                                    @using (Html.BeginForm("EditQuantity", "Order", FormMethod.Post))
+                                    {
+                                        @Html.Hidden("ProductCId", item.ProductCId)
+                                        @Html.Hidden("RegCId", item.RegCId)
+                                        @Html.Hidden("CurrentQuantity", item.Quantity)
+                                        <div class="d-flex align-items-center">
+                                            <button type="submit" name="action" value="Increase" class="quantity-btn">+</button>
+                                            <span class="mx-2">@Html.DisplayFor(modelItem => item.Quantity)</span>
+                                            <button type="submit" name="action" value="Decrease" class="quantity-btn">-</button>
+                                            @Html.ActionLink("Delete", "Delete", new { id = item.CartId }, new { @class = "btn btn-danger" })
+                                        </div>
+                                    }
+
+                                </div>
+                            </td>
+                            <td>
+                                <strong>@Html.DisplayFor(modelItem => item.ProductName)</strong>
+                                <div>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </div>
+                            </td>
+                            <td class="text-right">
+                                @Html.DisplayFor(modelItem => item.TotalPrice)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div class="total-amount">
+                    Total Amount: @ViewBag.TotalAmount
+                </div>
+                <a href="@Url.Action("PlaceOrder", "Order")" class="btn place-order-btn">Place Order</a>
+            </div>
+        </div>
+    </div>
+    <!-- footer section start -->
+    <div class="footer_section layout_padding">
+        <div class="container">
+            <div class="footer_logo"><a href="index.html"><img src="~/images/footer-logo.png"></a></div>
+            <div class="input_bt">
+                <input type="text" class="mail_bt" placeholder="Your Email" name="Your Email">
+                <span class="subscribe_bt" id="basic-addon2"><a href="#">Subscribe</a></span>
+            </div>
+            <div class="footer_menu">
+                <ul>
+                    <li><a href="#">Best Sellers</a></li>
+                    <li><a href="#">Gift Ideas</a></li>
+                    <li><a href="#">New Releases</a></li>
+                    <li><a href="#">Today's Deals</a></li>
+                    <li><a href="#">Customer Service</a></li>
+                </ul>
+            </div>
+            <div class="location_main">Help Line  Number : <a href="#">+1 1800 1200 1200</a></div>
+        </div>
+    </div>
+    <!-- footer section end -->
+    <!-- copyright section start -->
+    <div class="copyright_section">
+        <div class="container">
+            <p class="copyright_text">© 2024 All Rights Reserved. Design by <a href="https://html.design">Dilipkumar Jadam</a></p>
+        </div>
+    </div>
+    <!-- copyright section end -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

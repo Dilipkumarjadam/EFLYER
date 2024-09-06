@@ -1,0 +1,108 @@
+﻿/* General styles for the body */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f4f4f4, #e2e2e2);
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Centered container for the form */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+/* Form container styling */
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+}
+
+/* Header styling */
+h2 {
+    margin-top: 0;
+    text-align: center;
+    color: #007bff;
+    font-size: 28px;
+}
+
+h4 {
+    margin-bottom: 20px;
+    color: #007bff;
+}
+
+/* Form group styling */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Label styling */
+.control-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+/* Input field styling */
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+/* Submit button styling */
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+/* Validation message styling */
+.text-danger {
+    color: #dc3545;
+}
+
+/* Link styling */
+a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+    a:hover {
+        text-decoration: underline;
+        color: #0056b3;
+    }
+
+/* Alert box styling */
+.alert {
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}

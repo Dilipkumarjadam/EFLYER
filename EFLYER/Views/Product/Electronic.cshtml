@@ -1,0 +1,69 @@
+﻿@model List<EFLYER.DTOs.ProductDTO>
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor Accessor
+
+
+<div class="fashion_section">
+    <div class="container">
+        <h1 class="fashion_taital">Electronic</h1>
+        <div class="fashion_section_2">
+            @if (Model != null && Model.Any())
+            {
+                var products = Model;
+                var itemsPerRow = 3; // Number of products per row
+                var totalRows = (int)Math.Ceiling((double)products.Count / itemsPerRow);
+
+                for (int rowIndex = 0; rowIndex < totalRows; rowIndex++)
+                {
+                    var currentProducts = products.Skip(rowIndex * itemsPerRow).Take(itemsPerRow);
+
+                    <div class="row">
+                        @foreach (var product in currentProducts)
+                        {
+                            <div class="col-lg-4 col-sm-4 mb-4">
+                                <div class="box_main">
+                                    <h4 class="shirt_text">@product.ProductName</h4>
+                                    <p class="price_text">Start Price <span style="color: #262626;">$ @product.Price</span></p>
+                                    <div class="electronic_img">
+                                        <img src="@Url.Content(product.ProductImagePath)" alt="@product.ProductName">
+                                    </div>
+                                    <div class="btn_main">
+                                        <div class="buy_bt"><a href="#">Buy Now</a></div>
+                                        <form action="@Url.Action("IsProductInCart", "Order")" method="post">
+                                            <input type="hidden" name="Quantity" value="1" />
+                                            <input type="hidden" name="PricePerUnit" value="@product.Price" />
+                                            <input type="hidden" name="ProductCId" value="@product.ProductId" />
+                                            <input type="hidden" name="CategoryCId" value="@product.CategoryPId" />
+                                            <input type="hidden" name="RegCId" value="@Accessor.HttpContext.Session.GetInt32("UserId")" />
+                                            <button type="submit" class="buy_bt">Add to Cart</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                        @if (currentProducts.Count() < itemsPerRow)
+                        {
+                            var emptyColumns = itemsPerRow - currentProducts.Count();
+                            for (int i = 0; i < emptyColumns; i++)
+                            {
+                                <div class="col-lg-4 col-sm-4 mb-4"></div>
+                            }
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-12">
+                        <p>No products available.</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+

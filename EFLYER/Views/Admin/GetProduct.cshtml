@@ -1,0 +1,63 @@
+﻿    @model IEnumerable<EFLYER.DTOs.ProductDTO>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Product List</title>
+    <link rel="stylesheet" type="text/css" href="~/css/GetProduct.css" />
+</head>
+<body>
+
+    <h2>Product List</h2>
+    <p>
+        @Html.ActionLink("Add Product", "CreateProduct", "Admin", new { @class = "btn btn-primary" })
+    </p>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.First().ProductId)</th>
+                <th>@Html.DisplayNameFor(model => model.First().ProductName)</th>
+                <th>@Html.DisplayNameFor(model => model.First().Description)</th>
+                <th>@Html.DisplayNameFor(model => model.First().Price)</th>
+                <th>@Html.DisplayNameFor(model => model.First().CategoryName)</th>
+                <th>@Html.DisplayNameFor(model => model.First().ProductImage)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.ProductId)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ProductImagePath))
+                        {
+                            <img src="@Url.Content(item.ProductImagePath)" alt="Book Image" style="width: 100px; height: auto;" />
+                        }
+                        else
+                        {
+                            <img src="@Url.Content("~/Image/default.jpg")" alt="Default Image" style="width: auto; height: 200px;" />
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditProduct", new { id = item.ProductId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.ProductId }) |
+                        @Html.ActionLink("Delete", "DeleteProduct", new { id = item.ProductId })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</body>
+</html>

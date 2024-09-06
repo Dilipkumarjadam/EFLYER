@@ -1,0 +1,34 @@
+﻿.carousel-item {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.carousel-inner {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.carousel-item .container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.fashion_section_2 .row {
+    display: flex;
+    flex-wrap: nowrap; /* Prevent items from wrapping to the next row */
+}
+
+.box_main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px; /* Add margin between items if necessary */
+}
+
+.tshirt_img img {
+    max-width: 100%; /* Ensure images fit within their container */
+    height: auto;
+}

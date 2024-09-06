@@ -1,0 +1,132 @@
+﻿/* General body styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Header styles */
+header {
+    background-color: #343a40;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+    header h1 {
+        margin: 0;
+    }
+
+/* Search bar styles */
+.search-bar {
+    margin-top: 10px;
+    text-align: center; /* Center align search bar */
+}
+
+#searchInput {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+#searchButton {
+    padding: 10px 15px;
+    margin-left: -5px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    #searchButton:hover {
+        background-color: #0056b3;
+    }
+
+/* Main content styles */
+main {
+    padding: 20px;
+}
+
+/* Actions section styles */
+.actions {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+/* Base styles for action buttons */
+.action-button {
+    display: inline-block; /* Ensure the button behaves like a button */
+    text-align: center; /* Center text within the button */
+    padding: 10px 20px;
+    border: none;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none; /* Remove underline from links */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for background and shadow */
+    font-family: Arial, sans-serif; /* Ensure consistent font */
+}
+
+/* Button specific styles */
+.add-product {
+    background-color: #28a745;
+}
+
+    .add-product:hover {
+        background-color: #218838;
+    }
+
+.delete-product {
+    background-color: #dc3545;
+}
+
+    .delete-product:hover {
+        background-color: #c82333;
+    }
+
+.edit-product {
+    background-color: #ffc107;
+}
+
+    .edit-product:hover {
+        background-color: #e0a800;
+    }
+
+.view-users {
+    background-color: #17a2b8;
+}
+
+    .view-users:hover {
+        background-color: #117a8b;
+    }
+
+/* User info section styles */
+.user-info {
+    margin-top: 20px;
+}
+
+    .user-info h2 {
+        margin-top: 0;
+    }
+
+#userList {
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+/* Footer styles */
+footer {
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
