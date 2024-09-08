@@ -131,5 +131,21 @@ namespace EFLYER.Repository.Repository
                 }
             }
         }
+
+        public void AddOrder(int UserId, decimal TotalAmount)
+        {
+            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
+            {
+                using (SqlCommand cmd = new SqlCommand("AddOrder", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@RegOId", UserId);
+                    cmd.Parameters.AddWithValue("@TotalAmount", TotalAmount);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

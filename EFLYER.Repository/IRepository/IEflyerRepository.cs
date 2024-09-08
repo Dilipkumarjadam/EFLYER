@@ -10,6 +10,7 @@ namespace EFLYER.Repository
     public interface IEflyerRepository
     {
         public void AddUserData(RegisteredUserDTO modelDTO);
+        public List<RegisteredUserDTO> GetAdminData();
         public RegisteredUserDTO GetUserByEmail(string email);
         public List<RegisteredUserDTO> GetUserData();
         public bool Login(string Email, string Password, string Type);

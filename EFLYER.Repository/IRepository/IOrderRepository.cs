@@ -14,5 +14,6 @@ namespace EFLYER.Repository.IRepository
         public void DeleteCartItem(int CartId);
         public decimal GetProductPrice(int productCId);
         public void EditQuantity(int NewQuantity, int RegCId, int ProductCId);
+        public void AddOrder(int UserId, decimal TotalAmount);
     }
 }

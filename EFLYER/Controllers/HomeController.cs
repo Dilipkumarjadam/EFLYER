@@ -22,7 +22,7 @@ namespace EFLYER.Controllers
         {
             if (HttpContext.Session.GetString("UserSession") != null)
             {
-               
+
                 // Fetch all products
                 var allProducts = _eflyerRepository.GetProduct();
 
@@ -37,10 +37,15 @@ namespace EFLYER.Controllers
             }
             else
             {
-                return RedirectToAction("Login","Account");
+                return RedirectToAction("Login", "Account");
             }
+        }
 
-            
+        public ActionResult UserDetails()
+        {
+            var CurrentSession = HttpContext.Session.GetInt32("UserId");
+            var user = _eflyerRepository.GetUserData().Where(x => x.RegId == CurrentSession);
+            return View(user);
         }
 
         public IActionResult Privacy()

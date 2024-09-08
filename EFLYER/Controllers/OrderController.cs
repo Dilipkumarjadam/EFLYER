@@ -38,7 +38,7 @@ namespace EFLYER.Controllers
                     _repository.AddToCart(dTO);
                 }
             }
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
 
         }
 
@@ -92,8 +92,17 @@ namespace EFLYER.Controllers
             return RedirectToAction("CartIndex");
         }
 
+        public ActionResult PlaceOrder()
+        {
+            var CurrentUserId = Convert.ToInt32(HttpContext.Session.GetInt32("UserId"));
+            var obj = _repository.GetAllCartData().Where(x => x.RegCId == CurrentUserId);
+            var totalAmount = obj.Sum(x => x.TotalPrice);
+            _repository.AddOrder(CurrentUserId, totalAmount);
 
-       
+            return View();
+        }
+
+
 
     }
 }

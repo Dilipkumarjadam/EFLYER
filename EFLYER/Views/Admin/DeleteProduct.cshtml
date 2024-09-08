@@ -1,0 +1,63 @@
+﻿    @model IEnumerable<EFLYER.DTOs.ProductDTO>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/Table.css" />
+</head>
+<body>
+    <div class="container">
+        <p>
+            <a class="btn btn-primary" asp-action="CreateProduct">Add Product</a>
+            <a class="btn btn-primary" asp-action="AdminIndex">Home</a>
+        </p>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.First().ProductId)</th>
+                <th>@Html.DisplayNameFor(model => model.First().ProductName)</th>
+                <th>@Html.DisplayNameFor(model => model.First().Description)</th>
+                <th>@Html.DisplayNameFor(model => model.First().Price)</th>
+                <th>@Html.DisplayNameFor(model => model.First().CategoryName)</th>
+                <th>@Html.DisplayNameFor(model => model.First().ProductImage)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.ProductId)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ProductImagePath))
+                        {
+                            <img src="@Url.Content(item.ProductImagePath)" alt="Book Image" style="width: 100px; height: auto;" />
+                        }
+                        else
+                        {
+                            <img src="@Url.Content("~/Image/default.jpg")" alt="Default Image" style="width: auto; height: 200px;" />
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink("Delete", "DeleteProducts", new { id = item.ProductId })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</body>
+</html>

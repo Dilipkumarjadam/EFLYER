@@ -20,6 +20,21 @@ namespace EFLYER.Controllers
             return View();
         }
 
+        public ActionResult ViewOrders()
+        {
+            var row = _adminRepository.ViewOrders();
+            return View(row);
+        }
+
+        public ActionResult OrderDetails(int Id)
+        {
+            var row = _adminRepository.GetAllCartData().Where(x => x.RegCId == Id);
+            return View(row);
+        }
+
+
+
+
         public ActionResult GetProduct()
         {
             var row = _adminRepository.GetProduct();
@@ -118,10 +133,19 @@ namespace EFLYER.Controllers
         }
 
         // GET: AdminController/Delete/5
-        public ActionResult DeleteProduct(int id)
+
+        [HttpGet]
+        public ActionResult DeleteProduct()
+        {
+            var row = _adminRepository.GetProduct();
+            return View(row);
+        }
+
+        [HttpGet]
+        public ActionResult DeleteProducts(int id)
         {
             _adminRepository.DeleteProduct(id);
-            return RedirectToAction("GetProduct");
+            return RedirectToAction("DeleteProduct");
         }
 
      public IActionResult GetUser()

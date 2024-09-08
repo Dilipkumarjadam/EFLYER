@@ -15,6 +15,8 @@ namespace EFLYER.Repository
         public bool EditProduct(ProductDTO ProductDTO);
         public List<ProductDTO> EditProductGetData();
         public void DeleteProduct(int Id);
-       
+        public List<OrderDTO> GetAllCartData();
+        public List<OrderDTO> ViewOrders();
+
     }
 }

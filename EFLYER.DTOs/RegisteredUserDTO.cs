@@ -25,12 +25,16 @@ namespace EFLYER.DTOs
         [Required(ErrorMessage = "Please Enter EmailId")]
         [RegularExpression(@"^[^@\s]+@gmail[^@\s]+\.[^@\s]+$", ErrorMessage = "Please Enter Valid EmailId")]
         public string Email { get; set; }
+        public string AdminEmail { get; set; }
+        [Required(ErrorMessage = "Please Enter Password")]
+        public string AdminPassword { get; set; }
 
         [Required(ErrorMessage = "Please Enter Password")]
         public string Password { get; set; }
         public string ImagePath { get; set; }
         public IFormFile IMAGE { get; set; }
         public string Type {  get; set; }
+
       
     }
 }

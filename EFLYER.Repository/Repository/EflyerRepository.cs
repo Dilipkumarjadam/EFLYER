@@ -108,6 +108,34 @@ namespace EFLYER.Repository
             }
         }
 
+        public List<RegisteredUserDTO> GetAdminData()
+        {
+            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
+            {
+                using (SqlCommand cmd = new SqlCommand("Select * From AdminUser", con))
+                {
+                    List<RegisteredUserDTO> List = new List<RegisteredUserDTO>();
+
+                    SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+
+                    con.Open();
+                    sda.Fill(dt);
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        List.Add(new RegisteredUserDTO
+                        {
+                            AdminEmail = Convert.ToString(dr["AdminEmail"]),
+                            AdminPassword = Convert.ToString(dr["AdminPassword"])
+                        });
+                    }
+
+                    return List;
+                }
+            }
+        }
+
         public RegisteredUserDTO GetUserByEmail(string email)
         {
             using (SqlConnection con = new SqlConnection(this.SqlConnection()))

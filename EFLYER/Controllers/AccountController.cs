@@ -35,18 +35,27 @@ namespace EFLYER.Controllers
         [HttpPost]
         public ActionResult Login(string Email, string Password)
         {
-            var MyUsers = _repository.GetUserData().Where(U => U.Email == Email && U.Password == Password).FirstOrDefault();
-            if (MyUsers != null)
+            var AdminUser = _repository.GetAdminData().Where(A => A.AdminEmail == Email && A.AdminPassword == Password).FirstOrDefault();
+            if (AdminUser != null)
             {
-                HttpContext.Session.SetString("UserSession", MyUsers.FullName);
-                HttpContext.Session.SetInt32("UserId", MyUsers.RegId);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("AdminIndex", "Admin");
             }
             else
             {
-                ViewBag.Message = "Login Failed...";
+                var MyUsers = _repository.GetUserData().Where(U => U.Email == Email && U.Password == Password).FirstOrDefault();
+                if (MyUsers != null)
+                {
+                    HttpContext.Session.SetString("UserSession", MyUsers.FullName);
+                    HttpContext.Session.SetInt32("UserId", MyUsers.RegId);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ViewBag.Message = "Login Failed...";
+                }
+                return View();
             }
-            return View();
+
         }
 
         public ActionResult Logout()
@@ -58,7 +67,7 @@ namespace EFLYER.Controllers
             }
             else
             {
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index", "Home");
             }
         }
 

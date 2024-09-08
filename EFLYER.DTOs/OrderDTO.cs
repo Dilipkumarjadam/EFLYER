@@ -11,13 +11,17 @@ namespace EFLYER.DTOs
     {
         public int CartId { get; set; }
         public int ProductCId { get; set; }
+        public int OrderId { get; set; }
         public int RegCId { get; set; }
+        public int RegOId { get; set; }
         public int Quantity { get; set; }
         public int ProductId { get; set; }
+        public string OrderDate { get; set; }
         public string ProductName { get; set; }
         public string Description { get; set; }
         public decimal TotalPrice { get; set; }
         public decimal PricePerUnit { get; set; }
+        public decimal TotalAmount { get; set; }
         public string ProductImagePath { get; set; }
         public int CategoryCId { get; set; }
         public IFormFile ProductImage { get; set; }

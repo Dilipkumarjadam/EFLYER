@@ -130,7 +130,7 @@
                                     </li>
 
                                     <li>
-                                        <a href="#">
+                                        <a href="@Url.Action("UserDetails","Home")">
                                             <i class="fa fa-user" aria-hidden="true"></i>
                                             @if (@Accessor.HttpContext.Session.GetString("UserSession") != null)
                                             {
