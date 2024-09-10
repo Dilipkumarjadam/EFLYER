@@ -112,7 +112,7 @@ namespace EFLYER.Repository.Repository
 
         public void EditQuantity(int NewQuantity, int RegCId, int ProductCId)
         {
-           
+
             decimal price = GetProductPrice(ProductCId);
             decimal TotalPrice = price * NewQuantity;
 
@@ -144,6 +144,62 @@ namespace EFLYER.Repository.Repository
 
                     con.Open();
                     cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public List<OrderDTO> ViewOrders()
+        {
+            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
+            {
+                using (SqlCommand cmd = new SqlCommand("Select * From Orders", con))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    List<OrderDTO> list = new List<OrderDTO>();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    con.Open();
+                    da.Fill(dt);
+                    con.Close();
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        list.Add(new OrderDTO
+                        {
+                            OrderId = Convert.ToInt32(dr["OrderId"]),
+                            RegOId = Convert.ToInt32(dr["RegOId"]),
+                            OrderDate = Convert.ToString(dr["OrderDate"]),
+                            TotalAmount = Convert.ToDecimal(dr["TotalAmount"]),
+                        });
+                    }
+                    return list;
+                }
+            }
+        }
+
+        public List<OrderDTO> GetOrderById(int id)
+        {
+            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
+            {
+                using (SqlCommand cmd = new SqlCommand("Select * From Orders Where OrderId = @OrderId", con))
+                {
+                    cmd.Parameters.AddWithValue("@OrderId", id);
+                    List<OrderDTO> list = new List<OrderDTO>();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    con.Open();
+                    da.Fill(dt);
+                    con.Close();
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        list.Add(new OrderDTO
+                        {
+                            OrderId = Convert.ToInt32(dr["OrderId"]),
+                            RegOId = Convert.ToInt32(dr["RegOId"]),
+                            OrderDate = Convert.ToString(dr["OrderDate"]),
+                            TotalAmount = Convert.ToDecimal(dr["TotalAmount"]),
+                        });
+                    }
+                    return list;
                 }
             }
         }

@@ -76,6 +76,27 @@ namespace EFLYER.Repository
             }
         }
 
+        public void EditUserDetails(RegisteredUserDTO modelDTO)
+        {
+            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
+            {
+                using (SqlCommand cmd = new SqlCommand("EditUserDetails", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@RegId", modelDTO.RegId);
+                    cmd.Parameters.AddWithValue("@FullName", modelDTO.FullName);
+                    cmd.Parameters.AddWithValue("@Mobile", modelDTO.Mobile);
+                    cmd.Parameters.AddWithValue("@CountryRId", modelDTO.CountryRId);
+                    cmd.Parameters.AddWithValue("@Email", modelDTO.Email);
+                    cmd.Parameters.AddWithValue("@Password", modelDTO.Password);
+                    cmd.Parameters.AddWithValue("@ImagePath", modelDTO.ImagePath);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public List<RegisteredUserDTO> GetUserData()
         {
             using (SqlConnection con = new SqlConnection(this.SqlConnection()))
@@ -97,9 +118,11 @@ namespace EFLYER.Repository
                             RegId = Convert.ToInt32(dr["RegId"]),
                             FullName = Convert.ToString(dr["FullName"]),
                             CountryRId = Convert.ToInt32(dr["CountryRId"]),
+                            CountryName = Convert.ToString(dr["CountryName"]),
                             Mobile = Convert.ToString(dr["Mobile"]),
                             Email = Convert.ToString(dr["Email"]),
-                            Password = Convert.ToString(dr["Password"])
+                            Password = Convert.ToString(dr["Password"]),
+                            ImagePath = Convert.ToString(dr["ImagePath"])
                         });
                     }
 

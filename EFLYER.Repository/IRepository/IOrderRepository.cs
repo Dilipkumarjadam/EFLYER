@@ -15,5 +15,7 @@ namespace EFLYER.Repository.IRepository
         public decimal GetProductPrice(int productCId);
         public void EditQuantity(int NewQuantity, int RegCId, int ProductCId);
         public void AddOrder(int UserId, decimal TotalAmount);
+        public List<OrderDTO> ViewOrders();
+        public List<OrderDTO> GetOrderById(int id);
     }
 }

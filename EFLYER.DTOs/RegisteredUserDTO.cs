@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace EFLYER.DTOs
 {
     public class RegisteredUserDTO
@@ -21,16 +22,21 @@ namespace EFLYER.DTOs
 
         [Required(ErrorMessage = "Please Select Country")]
         public int CountryRId { get; set; }
+        public string CountryName { get; set; }
 
         [Required(ErrorMessage = "Please Enter EmailId")]
-        [RegularExpression(@"^[^@\s]+@gmail[^@\s]+\.[^@\s]+$", ErrorMessage = "Please Enter Valid EmailId")]
+        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com)$",
+        ErrorMessage = "Email must be from the domain gmail.com, yahoo.com, or outlook.com.")]
         public string Email { get; set; }
         public string AdminEmail { get; set; }
         [Required(ErrorMessage = "Please Enter Password")]
         public string AdminPassword { get; set; }
 
         [Required(ErrorMessage = "Please Enter Password")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        [Required(ErrorMessage = "Please select Image")]
         public string ImagePath { get; set; }
         public IFormFile IMAGE { get; set; }
         public string Type {  get; set; }

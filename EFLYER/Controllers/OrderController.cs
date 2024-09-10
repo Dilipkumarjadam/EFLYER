@@ -99,7 +99,36 @@ namespace EFLYER.Controllers
             var totalAmount = obj.Sum(x => x.TotalPrice);
             _repository.AddOrder(CurrentUserId, totalAmount);
 
-            return View();
+            var orderd = _repository.ViewOrders().Where(x => x.RegOId == CurrentUserId);
+            var orderId = orderd.Select(x => x.OrderId).FirstOrDefault();
+            return RedirectToAction("ThankYou", new { id = orderId });
+        }
+
+        public ActionResult ThankYou(int id)
+        {
+            var order = _repository.GetOrderById(id);
+            var a = order.FirstOrDefault();
+
+            if (a == null)
+            {
+                return NotFound();
+            }
+            DateTime orderDate;
+            bool isDateParsed = DateTime.TryParse(a.OrderDate, out orderDate);
+
+            if (!isDateParsed)
+            {
+                orderDate = DateTime.Now;
+            }
+          
+            var deliveryDate = orderDate.AddDays(7);
+            ViewBag.OrderId = id;
+            ViewBag.TotalAmount = a.TotalAmount;
+            ViewBag.OrderDate = orderDate.ToString("MMMM d, yyyy");
+            ViewBag.DeliveryDate = deliveryDate.ToString("MMMM d, yyyy");
+            ViewBag.DeliveryInfo = "Your order will be delivered within 7 business days.";
+
+            return View(a);
         }
 
 
