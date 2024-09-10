@@ -185,10 +185,17 @@
                                 <div>
                                     @Html.DisplayFor(modelItem => item.Description)
                                 </div>
+                                <div>
+                                    <strong>
+                                        MRP :
+                                        @Html.DisplayFor(modelItem => item.PricePerUnit)
+                                    </strong>
+                                </div>
                             </td>
+
                             <td class="text-right">
                                 <span class="item-price hidden" data-unit-price="@item.PricePerUnit">@item.PricePerUnit.ToString("F2")</span>
-                                <span class="item-total-price">@item.TotalPrice.ToString("F2")</span>
+                                <strong><span class="item-total-price">@item.TotalPrice.ToString("F2")</span></strong>
                             </td>
 
                         </tr>

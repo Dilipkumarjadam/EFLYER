@@ -13,60 +13,82 @@
     <link rel="stylesheet" type="text/css" href="~/css/style.css">
     <style>
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(to right, #ff7e5f, #feb47b); /* Gradient background */
             font-family: 'Poppins', sans-serif;
+            color: #333;
         }
 
         .thank-you-container {
-            max-width: 800px;
+            max-width: 700px;
             margin: 50px auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .thank-you-header {
-            margin-bottom: 20px;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             text-align: center;
         }
 
-            .thank-you-header h1 {
-                font-size: 2.5rem;
-                color: #28a745;
+        .thank-you-header h1 {
+            font-size: 2.5rem;
+            color: #28a745;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+            .thank-you-header h1::after {
+                content: '';
+                position: absolute;
+                left: 50%;
+                bottom: -10px;
+                width: 60px;
+                height: 4px;
+                background: #28a745;
+                transform: translateX(-50%);
+                border-radius: 2px;
             }
 
         .thank-you-details {
             margin-bottom: 20px;
+            font-size: 1.2rem;
         }
 
             .thank-you-details p {
-                font-size: 1.2rem;
                 margin: 10px 0;
+                color: #555;
+            }
+
+            .thank-you-details strong {
+                color: #007bff;
             }
 
         .thank-you-button {
-            text-align: center;
+            margin-top: 20px;
         }
 
             .thank-you-button a {
                 font-size: 1.2rem;
                 color: #ffffff;
-                background-color: #007bff;
-                padding: 10px 20px;
+                background: #007bff;
+                padding: 12px 24px;
                 border-radius: 5px;
                 text-decoration: none;
+                display: inline-block;
+                transition: background 0.3s ease;
             }
 
                 .thank-you-button a:hover {
-                    background-color: #0056b3;
+                    background: #0056b3;
+                }
+
+                .thank-you-button a i {
+                    margin-right: 8px;
                 }
     </style>
 </head>
 <body>
     <div class="thank-you-container">
         <div class="thank-you-header">
-            <h1>Thank You for Your Order!</h1>
+            <h1><i class="fa fa-check-circle"></i> Thank You for Your Order!</h1>
         </div>
         <div class="thank-you-details">
             <p><strong>Order ID:</strong> @ViewBag.OrderId</p>
@@ -76,10 +98,11 @@
             <p>@ViewBag.DeliveryInfo</p>
         </div>
         <div class="thank-you-button">
-            <a href="@Url.Action("Index", "Home")">Back to Home</a>
+            <a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> Back to Home</a>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </body>
 </html>

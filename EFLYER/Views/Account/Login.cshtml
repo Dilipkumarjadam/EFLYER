@@ -5,15 +5,146 @@
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
     <link rel="stylesheet" type="text/css" href="~/css/Login.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6f00, #ff9100, #ffca28, #ff6f00); /* Classic yellow and orange gradient */
+            background-size: 400% 400%; /* Ensure smooth animation */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            animation: gradientAnimation 12s ease infinite; /* Apply animation */
+        }
+
+        /* Keyframes for gradient background animation */
+        @@keyframes gradientAnimation {
+            0% {
+                background: linear-gradient(135deg, #ff6f00, #ff9100, #ffca28, #ff6f00);
+            }
+            50% {
+                background: linear-gradient(135deg, #ff9100, #ffca28, #ff6f00, #ff9100);
+            }
+            100% {
+                background: linear-gradient(135deg, #ff6f00, #ff9100, #ffca28, #ff6f00);
+            }
+        }
+
+        /* Keyframes for animations */
+        @@keyframes glow {
+            0% { box-shadow: 0 0 5px rgba(255, 140, 0, 0.6); }
+            100% { box-shadow: 0 0 15px rgba(255, 140, 0, 0.8); }
+        }
+
+        /* Centered container for the form */
+        .container {
+            width: 100%;
+            max-width: 400px; /* Increased width for better form spacing */
+            background: #ffffff; /* Solid white background for the form */
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        /* Style the form itself */
+        .form-horizontal {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Style the form headings */
+        h2 {
+            margin-top: 0;
+            text-align: center;
+            color: #ff6f00; /* Classic orange color */
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        /* Style form labels */
+        .control-label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        /* Style form groups */
+        .form-group {
+            margin-bottom: 1.5rem;
+            width: 100%; /* Full width to match form controls */
+        }
+
+        /* Style form controls */
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 12px;
+            font-size: 16px;
+            width: 100%; /* Ensure full width */
+            box-sizing: border-box; /* Ensure padding and border are included in the width */
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            background: #ffffff;
+        }
+
+        .form-control:focus {
+            border-color: #ff6f00;
+            outline: none;
+            box-shadow: 0 0 8px rgba(255, 140, 0, 0.5);
+            animation: glow 1.5s infinite alternate; /* Add glow effect on focus */
+        }
+
+        /* Style the submit button */
+        .btn-primary {
+            background: linear-gradient(135deg, #ff9100, #ff6f00); /* Classic orange gradient */
+            border: none;
+            color: #ffffff;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 18px; /* Increased font size for better visibility */
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+            width: 100%; /* Full width to match form controls */
+            box-sizing: border-box; /* Ensure padding and border are included in the width */
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #ff6f00, #ff9100); /* Reverse gradient for hover effect */
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05); /* Slightly larger on hover */
+        }
+
+        /* Style the register link */
+        .btn-register {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #ff6f00;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .btn-register:hover {
+            color: #ff9100;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h2>Login</h2>
+        <h2><i class="fas fa-user-lock"></i> Login</h2>
 
         @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-horizontal" }))
         {
@@ -30,21 +161,6 @@
                 <hr />
 
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @*  <div class="form-group">
-            @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label" })
-            <div>
-            @Html.DropDownListFor(
-            model => model.Type,
-            new List<SelectListItem>
-            {
-            new SelectListItem { Value = "User", Text = "User" },
-            new SelectListItem { Value = "Admin", Text = "Admin" }
-            },
-            new { @class = "form-control" }
-            )
-            @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
-            </div>
-            </div> *@
                 <div class="form-group">
                     @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
                     <div>
@@ -63,18 +179,13 @@
 
                 <div class="form-group">
                     <input type="submit" value="Login" class="btn-primary" />
-                    @Html.ActionLink("REGISTER", "RegisterUser", "Account", new { @class = "btn btn-link" })
+                    <br />
+                    @Html.ActionLink("REGISTER", "RegisterUser", "Account", new { @class = "btn-register" })
                 </div>
             </div>
         }
-
-
     </div>
 
-    @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_ValidationScriptsPartial");
-        }
-    }
+
 </body>
 </html>

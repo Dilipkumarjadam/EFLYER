@@ -1,10 +1,9 @@
 ﻿@model EFLYER.DTOs.ProductsViewModel
 <!-- Fashion Section Start -->
 <style>
-    .head {
-        margin-top: 70px;
-    }
+    
 </style>
+
 <div class="fashion_section">
     <!-- Fashion Carousel -->
     <div id="main_slider" class="carousel slide mt-5" data-ride="carousel">
@@ -75,7 +74,9 @@
             <i class="fa fa-angle-left"></i>
         </a>
     </div>
+</div>
 
+<div class="fashion_section">
     <!-- Electronic Carousel -->
     <div id="electronic_main_slider" class="carousel slide mt-5" data-ride="carousel">
         <div class="carousel-inner">
@@ -93,7 +94,7 @@
                                 <h1 class="fashion_taital">Electronic</h1>
                             </div>
                             <div class="fashion_section_2">
-                                <div class="row"> 
+                                <div class="row">
                                     @foreach (var product in productsForSlide)
                                     {
                                         <div class="col-lg-4 col-sm-4 mb-4">
@@ -147,7 +148,9 @@
             <i class="fa fa-angle-left"></i>
         </a>
     </div>
+</div>
 
+<div class="fashion_section">
     <!-- Jewellery Carousel -->
     <div id="jewellery_main_slider" class="carousel slide mt-5" data-ride="carousel">
         <div class="carousel-inner">
@@ -212,13 +215,13 @@
                 </div>
             }
         </div>
-        
+
         <a class="carousel-control-prev" href="#jewellery_main_slider" role="button" data-slide="prev">
-                <i class="fa fa-angle-right"></i>
+            <i class="fa fa-angle-right"></i>
         </a>
         <a class="carousel-control-next" href="#jewellery_main_slider" role="button" data-slide="next">
             <i class="fa fa-angle-left"></i>
         </a>
-    
+    </div>
 </div>
 <!-- Fashion Section End -->
