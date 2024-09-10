@@ -76,12 +76,19 @@ namespace EFLYER.Controllers
 
 
         [HttpPost]
-        public ActionResult EditQuantity(int ProductCId, int RegCId, int CurrentQuantity, string action)
+        public JsonResult EditQuantity(int ProductCId, int RegCId, int CurrentQuantity, string action)
         {
-            int newQuantity = action == "Increase" ? CurrentQuantity + 1 : CurrentQuantity - 1;
+            int newQuantity = action == "Increase" ? CurrentQuantity + 0 : CurrentQuantity - 0;
             _repository.EditQuantity(newQuantity, RegCId, ProductCId);
-            return RedirectToAction("CartIndex");
+
+            var totalAmount = _repository.GetAllCartData()
+                .Where(x => x.RegCId == RegCId)
+                .Sum(x => x.TotalPrice);
+
+            return Json(new { totalAmount = totalAmount });
         }
+
+
 
 
 

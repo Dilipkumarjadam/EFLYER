@@ -121,6 +121,10 @@
             .btn-link:hover {
                 color: #0056b3;
             }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -153,10 +157,10 @@
                         <th class="text-right">Price</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="cart-items">
                     @foreach (var item in Model)
                     {
-                        <tr>
+                        <tr data-cart-id="@item.CartId" data-product-id="@item.ProductCId" data-quantity="@item.Quantity">
                             <td>
                                 @if (!string.IsNullOrEmpty(item.ProductImagePath))
                                 {
@@ -168,19 +172,12 @@
                                 }
                                 <div class="mt-2">
                                     <strong class="quant">Quantity</strong>
-                                    @using (Html.BeginForm("EditQuantity", "Order", FormMethod.Post))
-                                    {
-                                        @Html.Hidden("ProductCId", item.ProductCId)
-                                        @Html.Hidden("RegCId", item.RegCId)
-                                        @Html.Hidden("CurrentQuantity", item.Quantity)
-                                        <div class="d-flex align-items-center">
-                                            <button type="submit" name="action" value="Increase" class="quantity-btn">+</button>
-                                            <span class="mx-2">@Html.DisplayFor(modelItem => item.Quantity)</span>
-                                            <button type="submit" name="action" value="Decrease" class="quantity-btn">-</button>
-                                            @Html.ActionLink("Delete", "Delete", new { id = item.CartId }, new { @class = "btn btn-danger" })
-                                        </div>
-                                    }
-
+                                    <div class="d-flex align-items-center">
+                                        <button type="button" class="quantity-btn" data-action="Increase">+</button>
+                                        <span class="mx-2 quantity">@Html.DisplayFor(modelItem => item.Quantity)</span>
+                                        <button type="button" class="quantity-btn" data-action="Decrease">-</button>
+                                        <button type="button" class="btn btn-danger btn-delete" data-id="@item.CartId">Delete</button>
+                                    </div>
                                 </div>
                             </td>
                             <td>
@@ -190,14 +187,17 @@
                                 </div>
                             </td>
                             <td class="text-right">
-                                @Html.DisplayFor(modelItem => item.TotalPrice)
+                                <span class="item-price hidden" data-unit-price="@item.PricePerUnit">@item.PricePerUnit.ToString("F2")</span>
+                                <span class="item-total-price">@item.TotalPrice.ToString("F2")</span>
                             </td>
+
                         </tr>
                     }
                 </tbody>
+
             </table>
             <div class="d-flex justify-content-between align-items-center mt-4">
-                <div class="total-amount">
+                <div class="total-amount" id="total-amount">
                     Total Amount: @ViewBag.TotalAmount
                 </div>
                 <a href="@Url.Action("PlaceOrder", "Order")" class="btn place-order-btn">Place Order</a>
@@ -234,5 +234,67 @@
     <!-- copyright section end -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.quantity-btn').on('click', function () {
+                var $row = $(this).closest('tr');
+                var cartId = $row.data('cart-id');
+                var productId = $row.data('product-id');
+                var currentQuantity = $row.data('quantity');
+                var action = $(this).data('action');
+                var newQuantity = action === 'Increase' ? currentQuantity + 1 : currentQuantity - 1;
+
+                if (newQuantity < 1) return; // Prevent reducing quantity below 1
+
+                $.ajax({
+                    url: '@Url.Action("EditQuantity", "Order")',
+                    type: 'POST',
+                    data: {
+                        ProductCId: productId,
+                        RegCId: @Accessor.HttpContext.Session.GetInt32("UserId"),
+                        CurrentQuantity: newQuantity,
+                        action: action
+                    },
+                    success: function (response) {
+                        // Update the quantity and total price for the row
+                        $row.data('quantity', newQuantity);
+                        $row.find('.quantity').text(newQuantity);
+
+                        // Calculate new item total price
+                        var unitPrice = parseFloat($row.find('.item-price').data('unit-price'));
+                        var itemTotalPrice = unitPrice * newQuantity;
+                        $row.find('.item-total-price').text(itemTotalPrice.toFixed(2));
+
+                        // Update the total amount for the cart
+                        $('#total-amount').text('Total Amount: ' + response.totalAmount.toFixed(2));
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error updating quantity:", error);
+                    }
+                });
+            });
+
+            $('.btn-delete').on('click', function () {
+                var cartId = $(this).data('id');
+
+                $.ajax({
+                    url: '@Url.Action("Delete", "Order")',
+                    type: 'POST',
+                    data: { id: cartId },
+                    success: function (response) {
+                        // Remove the item from the table
+                        $('tr[data-cart-id="' + cartId + '"]').remove();
+
+                        // Update the total amount for the cart
+                        $('#total-amount').text('Total Amount: ' + response.totalAmount.toFixed(2));
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error deleting item:", error);
+                    }
+                });
+            });
+        });
+
+    </script>
 </body>
 </html>
