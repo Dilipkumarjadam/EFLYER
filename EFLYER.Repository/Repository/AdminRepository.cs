@@ -23,6 +23,7 @@ namespace EFLYER.Repository
             return _configuration.GetConnectionString("DbConnection").ToString();
         }
 
+        #region----------------------------ADD METHODS---------------------------------------------
         public void AddProduct(ProductDTO productDTO)
         {
             using (SqlConnection con = new SqlConnection(this.SqlConnection()))
@@ -41,7 +42,9 @@ namespace EFLYER.Repository
                 }
             }
         }
+        #endregion
 
+        #region----------------------------GET METHODS---------------------------------------------
         public List<DropDownDTO> GetCategory()
         {
             using (SqlConnection con = new SqlConnection(this.SqlConnection()))
@@ -68,72 +71,7 @@ namespace EFLYER.Repository
             }
         }
 
-        #region--------------------------------------UPDATE DATA LOGIC----------------------------------------------------
 
-        public bool EditProduct(ProductDTO ProductDTO)
-        {
-
-            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
-            {
-                using (SqlCommand cmd = new SqlCommand("EditProduct", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@ProductId", ProductDTO.ProductId);
-                    cmd.Parameters.AddWithValue("@ProductName", ProductDTO.ProductName);
-                    cmd.Parameters.AddWithValue("@Description", ProductDTO.Description);
-                    cmd.Parameters.AddWithValue("@Price", ProductDTO.Price);
-                    cmd.Parameters.AddWithValue("@CategoryPId", ProductDTO.CategoryPId);
-                    cmd.Parameters.AddWithValue("@ProductImagePath", ProductDTO.ProductImagePath);
-                    con.Open();
-                    int i = cmd.ExecuteNonQuery();
-                    if (i > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-        }
-        #endregion-------------------------
-
-        #region ------------------------------------------UPDATE GET DATA LOGIC--------------------------------------------------
-        public List<ProductDTO> EditProductGetData()
-        {
-            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
-            {
-                using (SqlCommand cmd = new SqlCommand("GetProduct", con))
-                {
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    con.Open();
-                    da.Fill(dt);
-                    List<ProductDTO> ProductList = new List<ProductDTO>();
-
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        ProductList.Add(new ProductDTO
-                        {
-                            ProductId = Convert.ToInt32(dr["ProductId"]),
-                            ProductName = Convert.ToString(dr["ProductName"]),
-                            Description = Convert.ToString(dr["Description"]),
-                            Price = Convert.ToInt32(dr["Price"]),
-                            ProductImagePath = Convert.ToString(dr["ProductImagePath"]),
-                            CategoryPId = Convert.ToInt32(dr["CategoryPId"]),
-                            CategoryName = Convert.ToString(dr["CategoryName"])
-                        });
-                    }
-                    return ProductList;
-                }
-            }
-        }
-
-        #endregion
-
-        #region-----------------------------------------GETDATA LOGIC------------------------------------------------------
         public List<ProductDTO> GetProduct()
         {
             using (SqlConnection con = new SqlConnection(this.SqlConnection()))
@@ -163,19 +101,6 @@ namespace EFLYER.Repository
                 return ProductList;
             }
         }
-        #endregion-----------------------------------------------------------------------------------------------------
-
-        public void DeleteProduct(int Id)
-        {
-            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
-            {
-                SqlCommand cmd = new SqlCommand("DeleteProduct", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@ProductId", Id);
-                con.Open();
-                int i = cmd.ExecuteNonQuery();
-            }
-        }
 
         public List<OrderDTO> ViewOrders()
         {
@@ -194,7 +119,7 @@ namespace EFLYER.Repository
                     {
                         list.Add(new OrderDTO
                         {
-                            OrderId= Convert.ToInt32(dr["OrderId"]),
+                            OrderId = Convert.ToInt32(dr["OrderId"]),
                             RegOId = Convert.ToInt32(dr["RegOId"]),
                             OrderDate = Convert.ToString(dr["OrderDate"]),
                             TotalAmount = Convert.ToDecimal(dr["TotalAmount"]),
@@ -204,8 +129,6 @@ namespace EFLYER.Repository
                 }
             }
         }
-
-
 
         public List<OrderDTO> GetAllCartData()
         {
@@ -240,6 +163,83 @@ namespace EFLYER.Repository
                 }
             }
         }
+
+        public List<ProductDTO> EditProductGetData()
+        {
+            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
+            {
+                using (SqlCommand cmd = new SqlCommand("GetProduct", con))
+                {
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    con.Open();
+                    da.Fill(dt);
+                    List<ProductDTO> ProductList = new List<ProductDTO>();
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        ProductList.Add(new ProductDTO
+                        {
+                            ProductId = Convert.ToInt32(dr["ProductId"]),
+                            ProductName = Convert.ToString(dr["ProductName"]),
+                            Description = Convert.ToString(dr["Description"]),
+                            Price = Convert.ToInt32(dr["Price"]),
+                            ProductImagePath = Convert.ToString(dr["ProductImagePath"]),
+                            CategoryPId = Convert.ToInt32(dr["CategoryPId"]),
+                            CategoryName = Convert.ToString(dr["CategoryName"])
+                        });
+                    }
+                    return ProductList;
+                }
+            }
+        }
+        #endregion
+
+        #region----------------------------EDIT METHODS----------------------------------------
+
+        public bool EditProduct(ProductDTO ProductDTO)
+        {
+
+            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
+            {
+                using (SqlCommand cmd = new SqlCommand("EditProduct", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ProductId", ProductDTO.ProductId);
+                    cmd.Parameters.AddWithValue("@ProductName", ProductDTO.ProductName);
+                    cmd.Parameters.AddWithValue("@Description", ProductDTO.Description);
+                    cmd.Parameters.AddWithValue("@Price", ProductDTO.Price);
+                    cmd.Parameters.AddWithValue("@CategoryPId", ProductDTO.CategoryPId);
+                    cmd.Parameters.AddWithValue("@ProductImagePath", ProductDTO.ProductImagePath);
+                    con.Open();
+                    int i = cmd.ExecuteNonQuery();
+                    if (i > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region------------------------------DELETE METHOD-------------------------------------------
+        public void DeleteProduct(int Id)
+        {
+            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
+            {
+                SqlCommand cmd = new SqlCommand("DeleteProduct", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ProductId", Id);
+                con.Open();
+                int i = cmd.ExecuteNonQuery();
+            }
+        }
+        #endregion
 
     }
 }

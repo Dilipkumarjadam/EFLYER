@@ -9,15 +9,19 @@ namespace EFLYER.Repository
 {
     public interface IEflyerRepository
     {
+        #region----------------------------ADD METHODS IMPLEMENTATION---------------------------------------------
         public void AddUserData(RegisteredUserDTO modelDTO);
         public void EditUserDetails(RegisteredUserDTO modelDTO);
-        public List<RegisteredUserDTO> GetAdminData();
-        public RegisteredUserDTO GetUserByEmail(string email);
-        public List<RegisteredUserDTO> GetUserData();
         public bool Login(string Email, string Password, string Type);
         public bool CheckEmail(string Email, int Id, string Type);
         public void SendEmail(string address, string subject, string body);
+        #endregion
+
+        #region----------------------------GET METHODS IMPLEMENTATION---------------------------------------------
+        public List<RegisteredUserDTO> GetAdminData();
+        public List<RegisteredUserDTO> GetUserData();
         public List<DropDownDTO> GetCountry();
         public List<ProductDTO> GetProduct();
+        #endregion
     }
 }

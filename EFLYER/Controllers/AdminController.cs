@@ -93,6 +93,8 @@ namespace EFLYER.Controllers
             var categories = _adminRepository.GetCategory(); // Fetch categories for dropdown
             ViewBag.Category = new SelectList(categories, "CategoryId", "CategoryName");
             var row = (_adminRepository.EditProductGetData().Find(P => P.ProductId == id));
+            var p = row.ProductImagePath;
+            HttpContext.Session.SetString("Path", p);
             return View(row);
         }
 
@@ -103,6 +105,7 @@ namespace EFLYER.Controllers
         {
             try
             {
+                var Imagepath = HttpContext.Session.GetString("Path");
                 var categories = _adminRepository.GetCategory(); // Fetch categories for dropdown
                 ViewBag.Category = new SelectList(categories, "CategoryId", "CategoryName");
 
@@ -123,7 +126,12 @@ namespace EFLYER.Controllers
 
                     Product.ProductImagePath = $"/ProductsImg/{fileName}"; // Set image path in DTO
                 }
+                else
+                {
+                    Product.ProductImagePath = Imagepath;
+                }
                 _adminRepository.EditProduct(Product);
+                HttpContext.Session.Remove("Path");
                 return RedirectToAction(nameof(AdminIndex));
             }
             catch

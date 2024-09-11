@@ -26,6 +26,77 @@ namespace EFLYER.Repository
         {
             return _configuration.GetConnectionString("DbConnection").ToString();
         }
+
+        #region----------------------------ADD METHODS---------------------------------------------
+        public void AddUserData(RegisteredUserDTO modelDTO)
+        {
+            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
+            {
+                using (SqlCommand cmd = new SqlCommand("InsertRegData", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@FullName", modelDTO.FullName);
+                    cmd.Parameters.AddWithValue("@Mobile", modelDTO.Mobile);
+                    cmd.Parameters.AddWithValue("@CountryRId", modelDTO.CountryRId);
+                    cmd.Parameters.AddWithValue("@Email", modelDTO.Email);
+                    cmd.Parameters.AddWithValue("@Password", modelDTO.Password);
+                    cmd.Parameters.AddWithValue("@ImagePath", modelDTO.ImagePath);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public bool Login(string Email, string Password, string Type)
+        {
+            using (SqlConnection connection = new SqlConnection(this.SqlConnection()))
+            {
+                using (SqlCommand cmd = new SqlCommand("ValidateUser", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Email", Email);
+                    cmd.Parameters.AddWithValue("@Password", Password);
+                    cmd.Parameters.AddWithValue("@Type", Type);
+
+                    connection.Open();
+
+                    SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+
+                    return dt.Rows.Count > 0;
+                }
+            }
+        }
+
+        public bool CheckEmail(string Email, int Id, string Type)
+        {
+            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
+            {
+                SqlCommand cmd = new SqlCommand("CheckEmail", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Email", Email);
+                cmd.Parameters.AddWithValue("@RegId", Id);
+                cmd.Parameters.AddWithValue("@Type", Type);
+                con.Open();
+
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                sqlDataAdapter.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        #endregion
+        #region----------------------------GET METHODS---------------------------------------------
         public List<ProductDTO> GetProduct()
         {
             using (SqlConnection con = new SqlConnection(this.SqlConnection()))
@@ -53,47 +124,6 @@ namespace EFLYER.Repository
                     });
                 }
                 return ProductList;
-            }
-        }
-
-        public void AddUserData(RegisteredUserDTO modelDTO)
-        {
-            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
-            {
-                using (SqlCommand cmd = new SqlCommand("InsertRegData", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@FullName", modelDTO.FullName);
-                    cmd.Parameters.AddWithValue("@Mobile", modelDTO.Mobile);
-                    cmd.Parameters.AddWithValue("@CountryRId", modelDTO.CountryRId);
-                    cmd.Parameters.AddWithValue("@Email", modelDTO.Email);
-                    cmd.Parameters.AddWithValue("@Password", modelDTO.Password);
-                    cmd.Parameters.AddWithValue("@ImagePath", modelDTO.ImagePath);
-
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
-
-        public void EditUserDetails(RegisteredUserDTO modelDTO)
-        {
-            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
-            {
-                using (SqlCommand cmd = new SqlCommand("EditUserDetails", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@RegId", modelDTO.RegId);
-                    cmd.Parameters.AddWithValue("@FullName", modelDTO.FullName);
-                    cmd.Parameters.AddWithValue("@Mobile", modelDTO.Mobile);
-                    cmd.Parameters.AddWithValue("@CountryRId", modelDTO.CountryRId);
-                    cmd.Parameters.AddWithValue("@Email", modelDTO.Email);
-                    cmd.Parameters.AddWithValue("@Password", modelDTO.Password);
-                    cmd.Parameters.AddWithValue("@ImagePath", modelDTO.ImagePath);
-
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                }
             }
         }
 
@@ -159,41 +189,6 @@ namespace EFLYER.Repository
             }
         }
 
-        public RegisteredUserDTO GetUserByEmail(string email)
-        {
-            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
-            {
-                using (SqlCommand cmd = new SqlCommand("GetUserByEmail", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@Email", email);
-
-                    SqlDataAdapter sda = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-
-                    con.Open();
-                    sda.Fill(dt);
-
-                    if (dt.Rows.Count > 0)
-                    {
-                        DataRow dr = dt.Rows[0];
-                        return new RegisteredUserDTO
-                        {
-                            RegId = Convert.ToInt32(dr["RegId"]),
-                            FullName = Convert.ToString(dr["FullName"]),
-                            Email = Convert.ToString(dr["Email"]),
-                          
-                        };
-                    }
-
-                    return null;
-                }
-            }
-        }
-
-
-        #region---------------------------------------DROPDOWN LOGIC-------------------------------------------------------
-
         public List<DropDownDTO> GetCountry()
         {
             using (SqlConnection con = new SqlConnection(this.SqlConnection()))
@@ -219,56 +214,32 @@ namespace EFLYER.Repository
                 }
             }
         }
+
         #endregion
-
-        public bool Login(string Email, string Password, string Type)
-        {
-            using (SqlConnection connection = new SqlConnection(this.SqlConnection()))
-            {
-                using (SqlCommand cmd = new SqlCommand("ValidateUser", connection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@Email", Email);
-                    cmd.Parameters.AddWithValue("@Password", Password);
-                    cmd.Parameters.AddWithValue("@Type", Type);
-
-                    connection.Open();
-
-                    SqlDataAdapter sda = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-
-                    return dt.Rows.Count > 0;
-                }
-            }
-        }
-
-        public bool CheckEmail(string Email, int Id, string Type)
+        #region----------------------------EDIT METHODS---------------------------------------------
+        public void EditUserDetails(RegisteredUserDTO modelDTO)
         {
             using (SqlConnection con = new SqlConnection(this.SqlConnection()))
             {
-                SqlCommand cmd = new SqlCommand("CheckEmail", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Email", Email);
-                cmd.Parameters.AddWithValue("@RegId", Id);
-                cmd.Parameters.AddWithValue("@Type", Type);
-                con.Open();
+                using (SqlCommand cmd = new SqlCommand("EditUserDetails", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@RegId", modelDTO.RegId);
+                    cmd.Parameters.AddWithValue("@FullName", modelDTO.FullName);
+                    cmd.Parameters.AddWithValue("@Mobile", modelDTO.Mobile);
+                    cmd.Parameters.AddWithValue("@CountryRId", modelDTO.CountryRId);
+                    cmd.Parameters.AddWithValue("@Email", modelDTO.Email);
+                    cmd.Parameters.AddWithValue("@ImagePath", modelDTO.ImagePath);
 
-                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                sqlDataAdapter.Fill(dt);
-                if (dt.Rows.Count > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
-
-        #region ---------------------------------------------SEND EMAIL LOGIC-----------------------------------------------------------
+        #endregion
+        #region----------------------------DELETE METHODS---------------------------------------------
+        #endregion
+        #region --------------------------SEND EMAIL LOGIC----------------------------------
         public void SendEmail(string address, string subject, string body)
         {
             using (MailMessage mm = new MailMessage())

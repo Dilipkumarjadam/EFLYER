@@ -49,7 +49,7 @@ namespace EFLYER.Controllers
                     HttpContext.Session.SetInt32("UserId", MyUsers.RegId);
                     return RedirectToAction("Index", "Home");
                 }
-                else
+                else if(ModelState.IsValid)
                 {
                     ViewBag.Message = "Login Failed...";
                 }

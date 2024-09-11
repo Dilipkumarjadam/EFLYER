@@ -66,6 +66,10 @@ namespace EFLYER.Controllers
         public ActionResult EditUserDetails(RegisteredUserDTO registeredUserDTO, IFormFile IMAGE)
         {
             var CurrentSession = HttpContext.Session.GetInt32("UserId");
+            var user = _eflyerRepository.GetUserData().Where(x => x.RegId == CurrentSession);
+
+            var path = user.FirstOrDefault();
+            var iPath = path.ImagePath;
             int id = Convert.ToInt32(CurrentSession);
 
             var drop = _eflyerRepository.GetCountry();
@@ -95,6 +99,10 @@ namespace EFLYER.Controllers
                     }
 
                     registeredUserDTO.ImagePath = $"/UserImage/{fileName}"; // Set image path in DTO
+                }
+                else
+                {
+                    registeredUserDTO.ImagePath = iPath;
                 }
                 _eflyerRepository.EditUserDetails(registeredUserDTO);
                 if (HttpContext.Session.GetString("UserSession") != null)

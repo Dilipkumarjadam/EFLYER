@@ -9,14 +9,19 @@ namespace EFLYER.Repository
 {
     public interface IAdminRepository
     {
+        #region----------------------------ADD METHODS IMPLEMENTATION---------------------------------------------
         public void AddProduct(ProductDTO productDTO);
+        public bool EditProduct(ProductDTO ProductDTO);
+        public void DeleteProduct(int Id);
+        #endregion
+
+        #region----------------------------GET METHODS IMPLEMENTATION---------------------------------------------
         public List<ProductDTO> GetProduct();
         public List<DropDownDTO> GetCategory();
-        public bool EditProduct(ProductDTO ProductDTO);
         public List<ProductDTO> EditProductGetData();
-        public void DeleteProduct(int Id);
         public List<OrderDTO> GetAllCartData();
         public List<OrderDTO> ViewOrders();
+        #endregion
 
 
     }
