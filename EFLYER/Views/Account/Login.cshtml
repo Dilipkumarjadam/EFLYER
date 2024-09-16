@@ -29,24 +29,7 @@
             animation: gradientAnimation 12s ease infinite; /* Apply animation */
         }
 
-        /* Keyframes for gradient background animation */
-        @@keyframes gradientAnimation {
-            0% {
-                background: linear-gradient(135deg, #ff6f00, #ff9100, #ffca28, #ff6f00);
-            }
-            50% {
-                background: linear-gradient(135deg, #ff9100, #ffca28, #ff6f00, #ff9100);
-            }
-            100% {
-                background: linear-gradient(135deg, #ff6f00, #ff9100, #ffca28, #ff6f00);
-            }
-        }
 
-        /* Keyframes for glow effect */
-        @@keyframes glow {
-            0% { box-shadow: 0 0 5px rgba(255, 140, 0, 0.6); }
-            100% { box-shadow: 0 0 15px rgba(255, 140, 0, 0.8); }
-        }
 
         /* Centered container for the form */
         .container {
@@ -103,12 +86,12 @@
             background: #ffffff;
         }
 
-        .form-control:focus {
-            border-color: #ff6f00;
-            outline: none;
-            box-shadow: 0 0 8px rgba(255, 140, 0, 0.5);
-            animation: glow 1.5s infinite alternate; /* Add glow effect on focus */
-        }
+            .form-control:focus {
+                border-color: #ff6f00;
+                outline: none;
+                box-shadow: 0 0 8px rgba(255, 140, 0, 0.5);
+                animation: glow 1.5s infinite alternate; /* Add glow effect on focus */
+            }
 
         /* Style the submit button */
         .btn-primary {
@@ -124,11 +107,11 @@
             box-sizing: border-box; /* Ensure padding and border are included in the width */
         }
 
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #ff6f00, #ff9100); /* Reverse gradient for hover effect */
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
-            transform: scale(1.05); /* Slightly larger on hover */
-        }
+            .btn-primary:hover {
+                background: linear-gradient(135deg, #ff6f00, #ff9100); /* Reverse gradient for hover effect */
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+                transform: scale(1.05); /* Slightly larger on hover */
+            }
 
         /* Style the register link */
         .btn-register {
@@ -141,10 +124,10 @@
             transition: color 0.3s;
         }
 
-        .btn-register:hover {
-            color: #ff9100;
-            text-decoration: underline;
-        }
+            .btn-register:hover {
+                color: #ff9100;
+                text-decoration: underline;
+            }
     </style>
 </head>
 <body>
@@ -185,7 +168,8 @@
                 <div class="form-group">
                     <input type="submit" value="Login" class="btn-primary" />
                     <br />
-                    @Html.ActionLink("REGISTER", "RegisterUser", "Account", new { @class = "btn-register" })
+                    @Html.ActionLink("REGISTER", "RegisterUser", "Account", new { @class = "btn-register" }) |
+                    @Html.ActionLink("Forgot Password?", "ForgotPassword", "Home", new { @class = "btn-register" })
                 </div>
             </div>
         }
