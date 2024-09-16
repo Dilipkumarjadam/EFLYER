@@ -42,6 +42,39 @@ namespace EFLYER.Repository
                 }
             }
         }
+
+        public void AddProductsBulk(List<ProductDTO> products)
+        {
+            using (SqlConnection con = new SqlConnection(this.SqlConnection()))
+            {
+                con.Open();
+                using (SqlTransaction transaction = con.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (var product in products)
+                        {
+                            using (SqlCommand cmd = new SqlCommand("InsertProduct", con, transaction))
+                            {
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.AddWithValue("@ProductName", product.ProductName);
+                                cmd.Parameters.AddWithValue("@Description", product.Description);
+                                cmd.Parameters.AddWithValue("@Price", product.Price);
+                                cmd.Parameters.AddWithValue("@ProductImagePath", product.ProductImagePath);
+                                cmd.Parameters.AddWithValue("@CategoryPId", product.CategoryPId);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw; // Rethrow the exception for further handling
+                    }
+                }
+            }
+        }
         #endregion
 
         #region----------------------------GET METHODS---------------------------------------------
