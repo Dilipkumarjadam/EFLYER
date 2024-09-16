@@ -263,6 +263,16 @@ namespace EFLYER.Repository
                 }
             }
         }
+
+        public void ChangePassword(int RegId, string newPassword)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SendSms(string toPhoneNumber, string message)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }
