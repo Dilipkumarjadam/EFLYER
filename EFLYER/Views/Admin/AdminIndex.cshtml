@@ -7,33 +7,183 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
-    <link rel="stylesheet" type="text/css" href="~/css/AdminIndex.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Resetting some default styles */
+        body, h1, p, a, input, button {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Gradient Background with animation */
+        body {
+            background: linear-gradient(120deg, #a8c0ff, #3f2b96);
+            background-size: 200% 200%;
+            animation: gradientAnimation 15s ease infinite;
+            color: #333;
+            font-size: 16px;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @@keyframes gradientAnimation {
+            0% {
+                background: linear-gradient(120deg, #a8c0ff, #3f2b96);
+                background-position: 0% 0%;
+            }
+
+            50% {
+                background: linear-gradient(120deg, #f0b0ff, #c4e0ff);
+                background-position: 100% 100%;
+            }
+
+            100% {
+                background: linear-gradient(120deg, #a8c0ff, #3f2b96);
+                background-position: 0% 0%;
+            }
+        }
+
+        header {
+            background: #003366;
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-sizing: border-box;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: row; /* Align buttons in a row */
+            gap: 10px;
+            width: 100%;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            text-decoration: none;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: #007bff; /* Default background color */
+            flex: 1; /* Make buttons flexible */
+            box-sizing: border-box; /* Include padding in width calculations */
+            min-width: 150px; /* Minimum width to ensure buttons are visible */
+            text-align: center; /* Center text */
+        }
+
+            .action-button i {
+                margin-right: 10px;
+            }
+
+        .add-product {
+            background-color: #28a745;
+        }
+
+        .delete-product {
+            background-color: #dc3545;
+        }
+
+        .edit-product {
+            background-color: #ffc107;
+        }
+
+        .view-orders {
+            background-color: #007bff;
+        }
+
+        .action-button:hover {
+            opacity: 0.9;
+            transform: translateY(-3px);
+        }
+
+        .search-container {
+            width: 100%; /* Full width */
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            width: 100%; /* Full width */
+            margin: 0 auto; /* Center the search bar horizontally */
+        }
+
+            .search-bar input {
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                width: 100%;
+                margin-right: 10px;
+                box-sizing: border-box; /* Include padding in width calculations */
+            }
+
+            .search-bar button {
+                background-color: #007bff;
+                border: none;
+                padding: 10px;
+                border-radius: 5px;
+                color: white;
+                cursor: pointer;
+            }
+
+                .search-bar button i {
+                    font-size: 16px;
+                }
+
+        footer {
+            background: #003366;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1>Admin Panel</h1>
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search...">
-            <button id="searchButton"><i class="fas fa-search"></i></button>
-        </div>
     </header>
     <main>
-        <section class="actions">
-            <a href="@Url.Action("CreateProduct","Admin")" class="action-button add-product">Add Product</a>
-            <a href="@Url.Action("DeleteProduct","Admin")" class="action-button delete-product">Delete Product</a>
-            <a href="@Url.Action("GetProduct","Admin")" class="action-button edit-product">Edit Product</a>
-            <a href="@Url.Action("ViewOrders","Admin")" class="action-button view-users">View Orders</a>
-        </section>
-        <section class="user-info">
-            <h2>User Information</h2>
-            <div id="userList">
-                <!-- User info will be dynamically loaded here -->
+        <div class="actions">
+            <a href="@Url.Action("CreateProduct","Admin")" class="action-button add-product"><i class="fas fa-plus"></i>Add Product</a>
+            <a href="@Url.Action("DeleteProduct","Admin")" class="action-button delete-product"><i class="fas fa-trash"></i>Delete Product</a>
+            <a href="@Url.Action("GetProduct","Admin")" class="action-button edit-product"><i class="fas fa-edit"></i>Edit Product</a>
+            <a href="@Url.Action("ViewOrders","Admin")" class="action-button view-orders"><i class="fas fa-box"></i>View Orders</a>
+        </div>
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search products...">
+                <button id="searchButton"><i class="fas fa-search"></i></button>
             </div>
-        </section>
+        </div>
     </main>
     <footer>
-        <p>&copy; 2024 DilipKumar Jadam</p>
+        <p>&copy; 2024 All Rights Reserved.</p>
     </footer>
     <script src="scripts.js"></script>
 </body>
