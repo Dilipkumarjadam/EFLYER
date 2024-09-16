@@ -3,6 +3,10 @@ using EFLYER.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
+using System.Globalization;
+using CsvHelper;
+using CsvHelper.Configuration;
 
 namespace EFLYER.Controllers
 {
@@ -33,13 +37,74 @@ namespace EFLYER.Controllers
         }
 
 
-
-
         public ActionResult GetProduct()
         {
             var row = _adminRepository.GetProduct();
             return View(row);
         }
+
+        public ActionResult BulkUpload()
+        {
+            return View();
+        }
+
+        // POST: AdminController/BulkUpload
+        [HttpPost]
+        public async Task<ActionResult> BulkUpload(BulkUploadViewModel model)
+        {
+            if (model.FileUpload != null && model.FileUpload.Length > 0)
+            {
+                try
+                {
+                    using (var reader = new StreamReader(model.FileUpload.OpenReadStream()))
+                    {
+                        var content = await reader.ReadToEndAsync();
+                        var products = ParseProducts(content);
+                        _adminRepository.AddProductsBulk(products);
+                    }
+                    return RedirectToAction(nameof(AdminIndex));
+                }
+                catch (Exception ex)
+                {
+                    // Handle exception (e.g., log error, show message)
+                    ModelState.AddModelError("", "An error occurred while uploading the file.");
+                }
+            }
+            return View();
+        }
+
+        public sealed class ProductMap : ClassMap<ProductDTO>
+        {
+            public ProductMap()
+            {
+                Map(m => m.ProductName).Name("ProductName");
+                Map(m => m.Description).Name("Description");
+                Map(m => m.Price).Name("Price");
+                Map(m => m.ProductImagePath).Name("ProductImagePath");
+                Map(m => m.CategoryPId).Name("CategoryPId");
+                // Optionally map other properties if needed
+            }
+        }
+
+        private List<ProductDTO> ParseProducts(string fileContent)
+        {
+            var products = new List<ProductDTO>();
+
+            using (var reader = new StringReader(fileContent))
+            using (var csv = new CsvHelper.CsvReader(reader, new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HeaderValidated = null, // Ignore header validation errors
+                MissingFieldFound = null // Optionally, handle missing fields
+            }))
+            {
+                csv.Context.RegisterClassMap<ProductMap>();
+                products = csv.GetRecords<ProductDTO>().ToList();
+            }
+
+            return products;
+        }
+
+
 
         // GET: AdminController/Create
         public ActionResult CreateProduct()
@@ -100,7 +165,7 @@ namespace EFLYER.Controllers
 
         // POST: AdminController/Edit/5
         [HttpPost]
-       
+
         public ActionResult EditProduct(ProductDTO Product, IFormFile ProductImage)
         {
             try
@@ -156,7 +221,7 @@ namespace EFLYER.Controllers
             return RedirectToAction("DeleteProduct");
         }
 
-     public IActionResult GetUser()
+        public IActionResult GetUser()
         {
             return View();
         }

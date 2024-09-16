@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace EFLYER.Controllers
-{//hello
+{
     public class AccountController : Controller
     {
         private readonly IEflyerRepository _repository;
@@ -24,11 +24,10 @@ namespace EFLYER.Controllers
                 return RedirectToAction("Index", "Home");
 
             }
-            else if (HttpContext.Session.GetString("UserSession") == null)
+            else
             {
                 return View();
             }
-            return View();
 
         }
 
@@ -49,9 +48,9 @@ namespace EFLYER.Controllers
                     HttpContext.Session.SetInt32("UserId", MyUsers.RegId);
                     return RedirectToAction("Index", "Home");
                 }
-                else if(ModelState.IsValid)
+                else if (ModelState.IsValid)
                 {
-                    ViewBag.Message = "Login Failed...";
+                    ViewBag.Message = "Login Failed! Incorrect Email or Password";
                 }
                 return View();
             }
@@ -63,11 +62,11 @@ namespace EFLYER.Controllers
             if (HttpContext.Session.GetString("UserSession") != null)
             {
                 HttpContext.Session.Remove("UserSession");
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Index", "Home");
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return NotFound();
             }
         }
 
@@ -79,9 +78,8 @@ namespace EFLYER.Controllers
             return View();
         }
 
-        // POST: AccountController/Create
-        [HttpPost]
 
+        [HttpPost]
         public ActionResult RegisterUser(RegisteredUserDTO dTO, IFormFile IMAGE)
         {
             var drop = _repository.GetCountry();
@@ -91,7 +89,7 @@ namespace EFLYER.Controllers
                 var CheckEmail = _repository.CheckEmail(dTO.Email, 0, "INSERT");
                 if (CheckEmail == true)
                 {
-                    ViewBag.EmailError = "Email Already Exist Try Other.";
+                    ViewBag.EmailError = "Email Already Exist Try Another.";
                     return View(dTO);
                 }
                 else

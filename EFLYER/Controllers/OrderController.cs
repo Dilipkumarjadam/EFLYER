@@ -127,7 +127,7 @@ namespace EFLYER.Controllers
             {
                 orderDate = DateTime.Now;
             }
-          
+
             var deliveryDate = orderDate.AddDays(7);
             ViewBag.OrderId = id;
             ViewBag.TotalAmount = a.TotalAmount;

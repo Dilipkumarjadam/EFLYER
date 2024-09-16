@@ -21,6 +21,55 @@ namespace EFLYER.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ForgotPassword(string phoneNumber)
+        {
+            // Generate OTP
+            var otp = new Random().Next(100000, 999999).ToString();
+
+            // Send OTP via SMS
+            _eflyerRepository.SendSms(phoneNumber, $"Your OTP is {otp}");
+
+            // Store OTP securely (e.g., in-memory cache, database)
+            // For demo purposes, we'll skip this step
+
+            return Ok("OTP sent.");
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPasswordByEmail()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ForgotPasswordByEmail(string Email, string Mobile)
+        {
+            var checkUser = _eflyerRepository.GetUserData().Where(x => x.Email == Email && x.Mobile == Mobile);
+            var obj = checkUser.FirstOrDefault();
+            var Password = obj.Password;
+            if (checkUser != null)
+            {
+                string subject = "Password Recovery";
+                string body = $"Hello Sir,<br/>" +
+                              "Your Account Credentials is right here so be chill!<br/>" +
+                              $"Email Id: {Email}<br/>" +
+                              $"Password: {Password}<br/>" +
+                              "You can Login With This EmailId and Password to access the site." +
+                              "Thank you!";
+
+                _eflyerRepository.SendEmail(Email, subject, body);
+            }
+            return View();
+        }
+
         public ActionResult Index()
         {
             if (HttpContext.Session.GetString("UserSession") != null)
@@ -75,7 +124,7 @@ namespace EFLYER.Controllers
             var drop = _eflyerRepository.GetCountry();
             ViewBag.DROP = new SelectList(drop, "CountryId", "CountryName");
 
-            var CheckEmail = _eflyerRepository.CheckEmail(registeredUserDTO.Email,id, "Update");
+            var CheckEmail = _eflyerRepository.CheckEmail(registeredUserDTO.Email, id, "Update");
             if (CheckEmail == true)
             {
                 ViewBag.EmailError = "Email Already Exist Try Other.";
@@ -111,6 +160,39 @@ namespace EFLYER.Controllers
                 }
             }
             return RedirectToAction("Login", "Account");
+        }
+
+        [HttpGet]
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ChangePassword(string oldPassword, string newPassword, string confirmPassword)
+        {
+            if (newPassword != confirmPassword)
+            {
+                ViewBag.passError = "Password Does'nt Matched.";
+                return View();
+            }
+            else
+            {
+                int UId = Convert.ToInt32(HttpContext.Session.GetInt32("UserId"));
+                var user = _eflyerRepository.GetUserData().Where(x => x.RegId == UId);
+                var p = user.FirstOrDefault();
+                if (oldPassword == p.Password)
+                {
+                    _eflyerRepository.ChangePassword(UId, newPassword);
+                    return RedirectToAction("Login", "Account");
+                }
+                else
+                {
+                    ViewBag.WrongPassword = "Password does'nt match with Old Password.";
+                    return View();
+                }
+            }
+
         }
 
         public IActionResult Privacy()
