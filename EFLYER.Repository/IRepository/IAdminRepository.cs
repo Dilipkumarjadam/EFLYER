@@ -13,6 +13,7 @@ namespace EFLYER.Repository
         public void AddProduct(ProductDTO productDTO);
         public bool EditProduct(ProductDTO ProductDTO);
         public void DeleteProduct(int Id);
+        public void AddProductsBulk(List<ProductDTO> products);
         #endregion
 
         #region----------------------------GET METHODS IMPLEMENTATION---------------------------------------------
