@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace EFLYER.Controllers
-{
+{//hello
     public class AccountController : Controller
     {
         private readonly IEflyerRepository _repository;
